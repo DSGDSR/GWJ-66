@@ -17,17 +17,21 @@ func move(input: String, save = true) -> void:
 	if _moving:
 		return
 
-	var dir: Vector2 = Constants.INPUTS[input]
+	var prev_direction = direction
+	var was_colliding = _ray.is_colliding()
 
-	update_direction(dir)
+	update_direction(Constants.INPUTS[input])
+
+	if prev_direction == direction && was_colliding:
+		return
 
 	if !is_interacting:
 		if !_ray.is_colliding():
-			_move(dir, true)
+			_move(direction, true)
 		_detect_collision()
-	elif _can_move_with_object(dir):
-		_move(dir)
-		object.move(dir)
+	elif _can_move_with_object(direction):
+		_move(direction)
+		object.move(direction)
 
 	if save:
 		_save_state()
@@ -65,17 +69,12 @@ func _move(dir: Vector2, detect_collision = false) -> void:
 	var pos = position + dir * Constants.TILE_SIZE
 	_moving = true
 	_animation_tween = Utils.animate_position(self, pos, true)
-	_unhandled_input(null)
 	if detect_collision:
 		_animation_tween.finished.connect(_detect_collision)
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event == null:
-		_handle_move()
-		return
-
-	if event.is_action_pressed("interact"):
+	if event && event.is_action_pressed("interact"):
 		if object and !is_interacting:
 			object.interact()
 			is_interacting = true
@@ -84,7 +83,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			is_interacting = false
 		_save_state()
 		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed("undo") && !_moving:
+	elif Input.is_action_pressed("undo") && !_moving:
 		HistoryManager.undo()
 		get_viewport().set_input_as_handled()
 	else:
@@ -114,16 +113,16 @@ func _can_move_with_object(dir: Vector2) -> bool:
 
 
 func _save_state() -> void:
-	print(
+	"""print(
 		(
-			"SAVE: Is interacting: "
+			'SAVE: Is interacting: '
 			+ str(is_interacting)
-			+ " | Direction: "
+			+ ' | Direction: '
 			+ str(direction)
-			+ " | Position: "
+			+ ' | Position: '
 			+ str(position)
 		)
-	)
+	)"""
 	HistoryManager.add_to_history(
 		{
 			"direction": direction,

@@ -25,21 +25,27 @@ func remove_last() -> Dictionary:
 	return _history.pop_back()
 
 
+func step_back() -> void:
+	if _history.size() > 0:
+		# Get player back to previous position
+		_player.position = remove_last().position
+
+
 func undo() -> void:
 	if _history.size() > 0:
 		# Get player back to previous position with animation
 		var last = remove_last()
 
-		print(
+		"""print(
 			(
-				"GET: Is interacting: "
+				'SAVE: Is interacting: '
 				+ str(last.interacting)
-				+ " | Direction: "
+				+ ' | Direction: '
 				+ str(last.direction)
-				+ " | Position: "
+				+ ' | Position: '
 				+ str(last.position)
 			)
-		)
+		)"""
 
 		_player.is_interacting = last.interacting
 		_player.object = last.object
@@ -51,9 +57,3 @@ func undo() -> void:
 		var prev_direction = previous.direction if previous else Vector2.ZERO
 		_player.direction = prev_direction
 		_player.update_direction(prev_direction)
-
-
-func step_back() -> void:
-	if _history.size() > 0:
-		# Get player back to previous position
-		_player.position = remove_last().position
