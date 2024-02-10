@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2h1bmbonj6x4"]
+
+[sub_resource type="GDScript" id="GDScript_wd5ht"]
+script/source = "extends OptionButton
+
+func _ready() -> void:
+	item_selected.connect(_on_item_selected)
+	_populate_items()
+	select(1) # TODO select from saved settings
+
+func _populate_items() -> void:
+	for resolution in Enums.WINDOW_RESOLUTION:
+		add_item(resolution)
+
+func _on_item_selected(item: int) -> void:
+	DisplayServer.window_set_size(Enums.WINDOW_RESOLUTION.values()[item])
+"
+
+[node name="ResolutionSelector" type="OptionButton"]
+script = SubResource("GDScript_wd5ht")

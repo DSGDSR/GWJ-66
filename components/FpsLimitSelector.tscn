@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://clj2i7yuima41"]
+
+[sub_resource type="GDScript" id="GDScript_qma1q"]
+script/source = "extends OptionButton
+
+func _ready() -> void:
+	item_selected.connect(_on_item_selected)
+	_populate_items()
+	select(0) # TODO select from saved settings
+
+func _populate_items() -> void:
+	for limit in Enums.FPS_LIMIT:
+		add_item(limit)
+
+func _on_item_selected(item: int) -> void:
+	Engine.set_max_fps(Enums.FPS_LIMIT.values()[item])
+"
+
+[node name="FpsLimitSelector" type="OptionButton"]
+script = SubResource("GDScript_qma1q")

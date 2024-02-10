@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://dwrgblleg5uv7"]
+
+[sub_resource type="GDScript" id="GDScript_svubu"]
+script/source = "extends HSlider
+
+@export var bus_name: String = 'Master'
+
+@onready var _bus := AudioServer.get_bus_index(bus_name)
+
+func _ready() -> void:
+	value_changed.connect(_on_volume_change)
+	value = db_to_linear(AudioServer.get_bus_volume_db(_bus)) # TODO set audio from settings
+
+func _on_volume_change(value: float) -> void:
+	AudioServer.set_bus_volume_db(_bus, linear_to_db(value))
+"
+
+[node name="VolumeSlider" type="HSlider"]
+max_value = 1.0
+step = 0.05
+script = SubResource("GDScript_svubu")
