@@ -1,6 +1,9 @@
 extends CanvasLayer
 
-@onready var splash: Control = $Splash;
+@onready var splash: Control = $Splash
+@onready var menu: Control = $Menu
 
-func run_splash() -> void:
+
+func start_game() -> void:
+	menu.visible = true
 	splash.start()

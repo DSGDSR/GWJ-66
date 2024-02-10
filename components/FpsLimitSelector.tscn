@@ -9,11 +9,11 @@ func _ready() -> void:
 	select(0) # TODO select from saved settings
 
 func _populate_items() -> void:
-	for limit in Enums.FPS_LIMIT:
+	for limit in Constants.FPS_LIMIT:
 		add_item(limit)
 
 func _on_item_selected(item: int) -> void:
-	Engine.set_max_fps(Enums.FPS_LIMIT.values()[item])
+	Engine.set_max_fps(Constants.FPS_LIMIT.values()[item])
 "
 
 [node name="FpsLimitSelector" type="OptionButton"]

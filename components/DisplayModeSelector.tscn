@@ -10,7 +10,7 @@ func _ready() -> void:
 
 func _populate_items() -> void:
 	for mode in Enums.WINDOW_MODE.values():
-		add_item(Enums.WINDOW_MODE_LABEL[mode], mode)
+		add_item(Constants.WINDOW_MODE_LABEL[mode], mode)
 
 func _change_window_mode(selection: Enums.WINDOW_MODE) -> void:
 	match selection:

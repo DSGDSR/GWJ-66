@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bunyujnl835c"]
+
+[ext_resource type="TileSet" uid="uid://d01t8lxlxav4n" path="res://tiletest.tres" id="1_tcatf"]
+[ext_resource type="Script" path="res://classes/TileObject.gd" id="2_mckkr"]
+
+[node name="InteractiveObject" type="Area2D"]
+
+[node name="TileObject" type="TileMap" parent="."]
+tile_set = ExtResource("1_tcatf")
+format = 2
+layer_0/tile_data = PackedInt32Array(0, 65537, 1, 65536, 65537, 1, 65537, 65537, 1, 1, 65537, 1)
+script = ExtResource("2_mckkr")
+custom_name = "Name"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]

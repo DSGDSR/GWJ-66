@@ -20,7 +20,9 @@ config/icon="res://icon.svg"
 [autoload]
 
 Enums="*res://global/Enums.gd"
-Globals="*res://global/Globals.gd"
+HistoryManager="*res://global/HistoryManager.gd"
+Utils="*res://global/Utils.gd"
+Constants="*res://global/Constants.gd"
 
 [display]
 

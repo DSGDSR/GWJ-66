@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cq00mmmyscw65"]
+[gd_scene load_steps=19 format=3 uid="uid://cq00mmmyscw65"]
 
 [ext_resource type="Script" path="res://scripts/menu/Controls.gd" id="1_kuwp6"]
 [ext_resource type="Script" path="res://main_tree.gd" id="1_sut5g"]
@@ -8,9 +8,11 @@
 [ext_resource type="Script" path="res://scripts/menu/Options.gd" id="5_7432s"]
 [ext_resource type="PackedScene" uid="uid://jvc43lqdm45i" path="res://components/OptionsTabs.tscn" id="6_rhhv7"]
 [ext_resource type="Script" path="res://scripts/NotificationManager.gd" id="8_8fdfs"]
+[ext_resource type="Script" path="res://scripts/Debug.gd" id="8_g7uam"]
 [ext_resource type="TileSet" uid="uid://d01t8lxlxav4n" path="res://tiletest.tres" id="8_n6lx3"]
 [ext_resource type="PackedScene" uid="uid://m56h5p44l5nw" path="res://entities/Player/Player.tscn" id="9_k548v"]
 [ext_resource type="Script" path="res://scripts/ConfirmationModal.gd" id="9_xo8ke"]
+[ext_resource type="PackedScene" uid="uid://bunyujnl835c" path="res://components/InteractiveObject.tscn" id="12_s07r8"]
 
 [sub_resource type="SystemFont" id="SystemFont_3xdlh"]
 
@@ -26,16 +28,22 @@ func _process(delta) -> void:
 		text = \"%d FPS\" % Engine.get_frames_per_second()
 "
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kj3m5"]
+size = Vector2(62, 62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8dey7"]
+size = Vector2(62, 94)
+
 [node name="MainTree" type="Node2D"]
 script = ExtResource("1_sut5g")
 metadata/_edit_vertical_guides_ = [640.0]
 metadata/_edit_horizontal_guides_ = [360.0]
 
 [node name="Controls" type="CanvasLayer" parent="."]
-visible = false
 script = ExtResource("1_kuwp6")
 
 [node name="Menu" type="Control" parent="Controls"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -140,6 +148,37 @@ grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 2
 
+[node name="Debug" type="Control" parent="Controls"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_g7uam")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/Debug"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 50.0
+grow_horizontal = 0
+
+[node name="Interaction" type="Label" parent="Controls/Debug/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Direction" type="Label" parent="Controls/Debug/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Object" type="Label" parent="Controls/Debug/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
 [node name="Game" type="Node2D" parent="."]
 position = Vector2(320, 180)
 
@@ -149,17 +188,31 @@ format = 2
 layer_0/name = "floor"
 layer_1/name = "objects"
 layer_1/z_index = 1
-layer_1/tile_data = PackedInt32Array(-1, 65537, 1, 65538, 65537, 1, 262141, 65537, 1, 196604, 65537, 1)
+layer_1/tile_data = PackedInt32Array()
 
 [node name="Player" parent="Game/TileMap" instance=ExtResource("9_k548v")]
 z_index = 1
-position = Vector2(-304, -160)
+position = Vector2(-320, -160)
 
-[node name="TABLE" type="TileMap" parent="Game/TileMap"]
-tile_set = ExtResource("8_n6lx3")
-rendering_quadrant_size = 32
-format = 2
-layer_0/tile_data = PackedInt32Array(65530, 65537, 1, 65529, 65537, 1, -7, 65537, 1)
+[node name="Table" parent="Game/TileMap" instance=ExtResource("12_s07r8")]
+position = Vector2(-96, -96)
+
+[node name="TileObject" parent="Game/TileMap/Table" index="0"]
+custom_name = "Table"
+
+[node name="CollisionShape2D" parent="Game/TileMap/Table" index="1"]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_kj3m5")
+
+[node name="Bed" parent="Game/TileMap" instance=ExtResource("12_s07r8")]
+
+[node name="TileObject" parent="Game/TileMap/Bed" index="0"]
+layer_0/tile_data = PackedInt32Array(0, 65537, 1, 65536, 65537, 1, 65537, 65537, 1, 1, 65537, 1, 131072, 65537, 1, 131073, 65537, 1)
+custom_name = "Bed"
+
+[node name="CollisionShape2D" parent="Game/TileMap/Bed" index="1"]
+position = Vector2(32, 48)
+shape = SubResource("RectangleShape2D_8dey7")
 
 [node name="Scripts" type="Node" parent="."]
 
@@ -172,7 +225,11 @@ script = ExtResource("9_xo8ke")
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="Scripts/ConfirmationModal"]
 initial_position = 2
 
+[connection signal="pressed" from="Controls/Menu/Start/Buttons/Start" to="Controls/Menu" method="_start"]
 [connection signal="pressed" from="Controls/Menu/Start/Buttons/Options" to="Controls/Menu" method="_toggle_options" binds= [true]]
 [connection signal="pressed" from="Controls/Menu/Start/Buttons/Quit" to="Controls/Menu" method="_quit"]
 [connection signal="canceled" from="Scripts/ConfirmationModal/ConfirmationDialog" to="Scripts/ConfirmationModal" method="_on_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="Scripts/ConfirmationModal/ConfirmationDialog" to="Scripts/ConfirmationModal" method="_on_confirmed"]
+
+[editable path="Game/TileMap/Table"]
+[editable path="Game/TileMap/Bed"]

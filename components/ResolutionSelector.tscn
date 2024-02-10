@@ -9,11 +9,11 @@ func _ready() -> void:
 	select(1) # TODO select from saved settings
 
 func _populate_items() -> void:
-	for resolution in Enums.WINDOW_RESOLUTION:
+	for resolution in Constants.WINDOW_RESOLUTION:
 		add_item(resolution)
 
 func _on_item_selected(item: int) -> void:
-	DisplayServer.window_set_size(Enums.WINDOW_RESOLUTION.values()[item])
+	DisplayServer.window_set_size(Constants.WINDOW_RESOLUTION.values()[item])
 "
 
 [node name="ResolutionSelector" type="OptionButton"]
