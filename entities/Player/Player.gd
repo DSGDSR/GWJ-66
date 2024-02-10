@@ -80,12 +80,10 @@ func _input(event: InputEvent) -> void:
 			object.interact()
 			is_interacting = true
 			interaction_dir = Constants.DIRECTION_TO_AXIS[direction]
-			_save_state()
 		elif is_interacting:
 			is_interacting = false
 		get_viewport().set_input_as_handled()
 	elif Input.is_action_pressed("undo") && !_moving:
-		print("_add_constant_central_force")
 		HistoryManager.undo()
 		get_viewport().set_input_as_handled()
 	else:
@@ -108,6 +106,7 @@ func _detect_collision() -> void:
 
 
 func _can_move_with_object(dir: Vector2) -> bool:
+	print(Constants.DIRECTION_TO_AXIS[dir] == interaction_dir, _ray.is_colliding(), _ray.get_collider() == object)
 	return (
 		Constants.DIRECTION_TO_AXIS[dir] == interaction_dir
 		&& (!_ray.is_colliding() || _ray.get_collider() == object)
@@ -115,20 +114,21 @@ func _can_move_with_object(dir: Vector2) -> bool:
 
 
 func _save_state() -> void:
-	"""print(
+	print(
 		(
-			'SAVE: Is interacting: '
+			"SAVE: Is interacting: "
 			+ str(is_interacting)
-			+ ' | Direction: '
+			+ " | Direction: "
 			+ str(direction)
-			+ ' | Position: '
+			+ " | Position: "
 			+ str(position)
 		)
-	)"""
+	)
 	HistoryManager.add_to_history(
 		{
 			"direction": direction,
 			"interacting": is_interacting,
+			"interacting_dir": interaction_dir,
 			"position": position,
 			"object": object
 		}

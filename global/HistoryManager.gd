@@ -36,18 +36,19 @@ func undo() -> void:
 		# Get player back to previous position with animation
 		var last = remove_last()
 
-		"""print(
+		print(
 			(
-				'SAVE: Is interacting: '
+				"SAVE: Is interacting: "
 				+ str(last.interacting)
-				+ ' | Direction: '
+				+ " | Direction: "
 				+ str(last.direction)
-				+ ' | Position: '
+				+ " | Position: "
 				+ str(last.position)
 			)
-		)"""
+		)
 
 		_player.is_interacting = last.interacting
+		_player.interaction_dir = last.interacting_dir
 		_player.object = last.object
 		if last.position != _player.position:
 			var last_movement = Constants.INPUTS.find_key(Vector2.ZERO - last.direction)
