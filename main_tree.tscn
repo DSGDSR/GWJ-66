@@ -154,6 +154,7 @@ script = ExtResource("9_kgfcw")
 [node name="Level" type="Node2D" parent="Game/LevelContainer" groups=["Level"]]
 
 [node name="Player" parent="Game/LevelContainer" instance=ExtResource("9_k548v")]
+visible = false
 position = Vector2(-32, -32)
 
 [node name="Scripts" type="Node" parent="."]

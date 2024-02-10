@@ -51,7 +51,7 @@ func undo() -> void:
 		_player.object = last.object
 		if last.position != _player.position:
 			var last_movement = Constants.INPUTS.find_key(Vector2.ZERO - last.direction)
-			_player.move(last_movement, false)
+			_player.move(last_movement, Constants.UNDO_ANIMATION_TIME, false)
 
 		var previous = get_last()
 		var prev_direction = previous.direction if previous else Vector2.ZERO

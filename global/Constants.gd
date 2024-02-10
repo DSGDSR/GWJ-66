@@ -1,5 +1,8 @@
 extends Node
 
+const ANIMATION_TIME = 8.5
+const UNDO_ANIMATION_TIME = 15.0
+
 const TILE_SIZE = 32
 
 const INPUTS: Dictionary = {
@@ -15,8 +18,6 @@ const DIRECTION_TO_AXIS: Dictionary = {
 	Vector2.RIGHT: Enums.AXIS.X,
 	Vector2.LEFT: Enums.AXIS.X
 }
-
-const FPS_LIMIT: Dictionary = {"No limit": 0, "30": 30, "60": 60, "120": 120}
 
 const WINDOW_MODE_LABEL: Dictionary = {
 	Enums.WINDOW_MODE.FULLSCREEN: "Fullscreen",

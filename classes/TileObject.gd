@@ -21,10 +21,11 @@ func interact() -> void:
 	print("interacting with " + custom_name)
 
 
-func move(dir: Vector2):
+func move(dir: Vector2, animation_time: float) -> void:
+	print("move " + custom_name + " " + str(dir))
 	var pos = _parent.position + dir * Constants.TILE_SIZE
 	_last_pos = _parent.position
-	_animation_tween = Utils.animate_position(_parent, pos)
+	_animation_tween = Utils.animate_position(_parent, pos, animation_time)
 
 
 func _on_body_entered(_body) -> void:

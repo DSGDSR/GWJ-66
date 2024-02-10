@@ -4,7 +4,7 @@ class_name Player
 
 @onready var _ray = $RayCast2D
 
-var direction: Vector2 = Vector2.DOWN
+var direction: Vector2 = Vector2.ZERO
 var object: TileObject = null
 var is_interacting: bool = false
 var interaction_dir: Enums.AXIS
@@ -13,7 +13,7 @@ var _moving = false
 var _animation_tween: Tween
 
 
-func move(input: String, save = true) -> void:
+func move(input: String, animation_time: float, save := true) -> void:
 	if _moving:
 		return
 
@@ -22,16 +22,17 @@ func move(input: String, save = true) -> void:
 
 	update_direction(Constants.INPUTS[input])
 
-	if prev_direction == direction && was_colliding:
+	if prev_direction == direction && was_colliding && !is_interacting:
+		_detect_collision()
 		return
 
 	if !is_interacting:
 		if !_ray.is_colliding():
-			_move(direction, true)
+			_move(direction, animation_time, true)
 		_detect_collision()
 	elif _can_move_with_object(direction):
-		_move(direction)
-		object.move(direction)
+		_move(direction, animation_time)
+		object.move(direction, animation_time)
 
 	if save:
 		_save_state()
@@ -65,25 +66,26 @@ func cancel_movement() -> void:
 	enable_movement()
 
 
-func _move(dir: Vector2, detect_collision = false) -> void:
+func _move(dir: Vector2, animation_time: float, detect_collision = false) -> void:
 	var pos = position + dir * Constants.TILE_SIZE
 	_moving = true
-	_animation_tween = Utils.animate_position(self, pos, true)
+	_animation_tween = Utils.animate_position(self, pos, animation_time, true)
 	if detect_collision:
 		_animation_tween.finished.connect(_detect_collision)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if event && event.is_action_pressed("interact"):
 		if object and !is_interacting:
 			object.interact()
 			is_interacting = true
 			interaction_dir = Constants.DIRECTION_TO_AXIS[direction]
+			_save_state()
 		elif is_interacting:
 			is_interacting = false
-		_save_state()
 		get_viewport().set_input_as_handled()
 	elif Input.is_action_pressed("undo") && !_moving:
+		print("_add_constant_central_force")
 		HistoryManager.undo()
 		get_viewport().set_input_as_handled()
 	else:
@@ -93,7 +95,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _handle_move() -> void:
 	for dir in Constants.INPUTS.keys():
 		if Input.is_action_pressed(dir):
-			move(dir)
+			move(dir, Constants.ANIMATION_TIME)
 
 
 func _detect_collision() -> void:
