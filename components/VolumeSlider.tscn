@@ -11,8 +11,8 @@ func _ready() -> void:
 	value_changed.connect(_on_volume_change)
 	value = db_to_linear(AudioServer.get_bus_volume_db(_bus)) # TODO set audio from settings
 
-func _on_volume_change(value: float) -> void:
-	AudioServer.set_bus_volume_db(_bus, linear_to_db(value))
+func _on_volume_change(val: float) -> void:
+	AudioServer.set_bus_volume_db(_bus, linear_to_db(val))
 "
 
 [node name="VolumeSlider" type="HSlider"]

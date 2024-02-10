@@ -6,7 +6,7 @@ extends Node2D
 # GAME STARTS
 func _ready() -> void:
 	# Set max fps
-	Engine.set_max_fps(30)
+	Engine.set_max_fps(60)
 
 	# Run splashes and show controls
 	controls.visible = true

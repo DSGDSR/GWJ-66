@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cq00mmmyscw65"]
+[gd_scene load_steps=13 format=3 uid="uid://cq00mmmyscw65"]
 
 [ext_resource type="Script" path="res://scripts/menu/Controls.gd" id="1_kuwp6"]
 [ext_resource type="Script" path="res://main_tree.gd" id="1_sut5g"]
@@ -12,20 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://m56h5p44l5nw" path="res://entities/Player/Player.tscn" id="9_k548v"]
 [ext_resource type="Script" path="res://classes/TileLevel.gd" id="9_kgfcw"]
 [ext_resource type="Script" path="res://scripts/ConfirmationModal.gd" id="9_xo8ke"]
-
-[sub_resource type="SystemFont" id="SystemFont_3xdlh"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_ggsua"]
-font = SubResource("SystemFont_3xdlh")
-font_size = 20
-
-[sub_resource type="GDScript" id="GDScript_jwmju"]
-script/source = "extends Label
-
-func _process(delta) -> void:
-	if visible:
-		text = \"%d FPS\" % Engine.get_frames_per_second()
-"
 
 [node name="MainTree" type="Node2D"]
 script = ExtResource("1_sut5g")
@@ -96,20 +82,6 @@ script = ExtResource("5_7432s")
 [node name="TabsContainer" parent="Controls/Menu/Options" instance=ExtResource("6_rhhv7")]
 layout_mode = 1
 
-[node name="FpsCounter" type="Label" parent="Controls/Menu/Options"]
-visible = false
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -57.0
-offset_top = 13.0
-offset_right = -17.0
-offset_bottom = 41.0
-grow_horizontal = 0
-label_settings = SubResource("LabelSettings_ggsua")
-script = SubResource("GDScript_jwmju")
-
 [node name="Splash" type="Control" parent="Controls"]
 visible = false
 layout_mode = 3
@@ -173,10 +145,8 @@ layout_mode = 2
 size_flags_horizontal = 8
 
 [node name="Game" type="Node2D" parent="."]
-position = Vector2(320, 180)
 
 [node name="LevelContainer" type="TileMap" parent="Game"]
-position = Vector2(-32, 32)
 format = 2
 layer_0/tile_data = PackedInt32Array(-262148, 2, 2, -196612, 2, 2, -131076, 2, 2, -65540, 2, 2, -4, 2, 2, 65532, 2, 2, 131068, 2, 2, -262147, 2, 2, -196611, 2, 2, -131075, 2, 2, -65539, 2, 2, -3, 2, 2, 65533, 2, 2, 131069, 2, 2, -327684, 2, 2, -327683, 2, 2, -327682, 2, 2, -262146, 2, 2, -327681, 2, 2, -262145, 2, 2, -393216, 2, 2, -327680, 2, 2, -393215, 2, 2, -327679, 2, 2, -393214, 2, 2, -327678, 2, 2, -393213, 2, 2, -327677, 2, 2, -393212, 2, 2, -327676, 2, 2, -262140, 2, 2, -196604, 262146, 2, -131068, 2, 2, -65532, 2, 2, 4, 2, 2, 65540, 2, 2, -393211, 2, 2, -327675, 2, 2, -262139, 2, 2, -196603, 2, 2, -131067, 2, 2, -65531, 2, 2, 5, 2, 2, 65541, 2, 2, 196604, 2, 2, 196605, 2, 2, 131070, 2, 2, 196606, 2, 2, 131071, 2, 2, 196607, 2, 2, 65536, 2, 2, 131072, 2, 2, 65537, 2, 2, 131073, 2, 2, 65538, 2, 2, 131074, 2, 2, 65539, 2, 2, 131075, 2, 2, 131076, 2, 2, 131077, 2, 2)
 script = ExtResource("9_kgfcw")
@@ -184,7 +154,7 @@ script = ExtResource("9_kgfcw")
 [node name="Level" type="Node2D" parent="Game/LevelContainer" groups=["Level"]]
 
 [node name="Player" parent="Game/LevelContainer" instance=ExtResource("9_k548v")]
-position = Vector2(0, -64)
+position = Vector2(-32, -32)
 
 [node name="Scripts" type="Node" parent="."]
 

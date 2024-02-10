@@ -22,11 +22,12 @@ size = Vector2(62, 30)
 [node name="Tutorial" type="TileMap"]
 tile_set = ExtResource("1_fagrk")
 format = 2
-layer_0/tile_data = PackedInt32Array(131068, 2, 2, 196604, 2, 2, 131069, 2, 2, 196605, 2, 2, 131070, 2, 2, 196606, 2, 2, 131071, 2, 2, 196607, 2, 2, 65536, 2, 2, 131072, 2, 2, 65537, 2, 2, 131073, 2, 2, 65538, 2, 2, 131074, 2, 2, 65539, 2, 2, 131075, 2, 2, 65540, 2, 2, 131076, 2, 2, 65541, 2, 2, 131077, 2, 2, -393212, 2, 2, -327676, 2, 2, -262140, 2, 2, -196604, 262146, 2, -131068, 2, 2, -65532, 2, 2, 4, 2, 2, -393211, 2, 2, -327675, 2, 2, -262139, 2, 2, -196603, 2, 2, -131067, 2, 2, -65531, 2, 2, 5, 2, 2, -327684, 2, 2, -262148, 2, 2, -327683, 2, 2, -262147, 2, 2, -327682, 2, 2, -262146, 2, 2, -327681, 2, 2, -262145, 2, 2, -393216, 2, 2, -327680, 2, 2, -393215, 2, 2, -327679, 2, 2, -393214, 2, 2, -327678, 2, 2, -393213, 2, 2, -327677, 2, 2, -196612, 2, 2, -131076, 2, 2, -65540, 2, 2, -4, 2, 2, 65532, 2, 2, -196611, 2, 2, -131075, 2, 2, -65539, 2, 2, -3, 2, 2, 65533, 2, 2)
+layer_0/tile_data = PackedInt32Array(131078, 2, 2, 196614, 2, 2, 262150, 2, 2, 327686, 2, 2, 393222, 2, 2, 458758, 2, 2, 524294, 2, 2, 524295, 2, 2, 524296, 2, 2, 524297, 2, 2, 524298, 2, 2, 524299, 2, 2, 524300, 2, 2, 524301, 2, 2, 458765, 2, 2, 393229, 2, 2, 327693, 2, 2, 327694, 2, 2, 262158, 2, 2, 196622, 2, 2, 196621, 2, 2, 131085, 2, 2, 131084, 2, 2, 131083, 2, 2, 131082, 2, 2, 131081, 2, 2, 131080, 2, 2, 131079, 2, 2, 262157, 2, 0)
 script = ExtResource("2_tme4o")
+player_position = Vector2(320, 180)
 
 [node name="Bed" parent="." instance=ExtResource("1_pie5n")]
-position = Vector2(64, -128)
+position = Vector2(352, 96)
 
 [node name="TileObject" parent="Bed" index="0"]
 layer_0/tile_data = PackedInt32Array(0, 262146, 1, 65536, 262146, 1, 65537, 262146, 1, 1, 262146, 1, 131072, 262146, 1, 131073, 262146, 1)
@@ -37,7 +38,7 @@ position = Vector2(32, 48)
 shape = SubResource("RectangleShape2D_8dey7")
 
 [node name="Table" parent="." instance=ExtResource("1_pie5n")]
-position = Vector2(0, -128)
+position = Vector2(288, 96)
 
 [node name="TileObject" parent="Table" index="0"]
 layer_0/tile_data = PackedInt32Array(0, 262146, 0, 1, 262146, 0, 65535, 262146, 0)
@@ -48,7 +49,7 @@ position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_kj3m5")
 
 [node name="Chair" parent="." instance=ExtResource("1_pie5n")]
-position = Vector2(32, -96)
+position = Vector2(320, 128)
 
 [node name="TileObject" parent="Chair" index="0"]
 layer_0/tile_data = PackedInt32Array(0, 131074, 3)
@@ -59,7 +60,7 @@ position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_4ou81")
 
 [node name="Lamp" parent="." instance=ExtResource("1_pie5n")]
-position = Vector2(64, 0)
+position = Vector2(352, 224)
 
 [node name="TileObject" parent="Lamp" index="0"]
 layer_0/tile_data = PackedInt32Array(1, 393218, 3)
@@ -70,6 +71,7 @@ position = Vector2(48, 16)
 shape = SubResource("RectangleShape2D_kq878")
 
 [node name="Wardrobe" parent="." instance=ExtResource("1_pie5n")]
+position = Vector2(288, 224)
 
 [node name="TileObject" parent="Wardrobe" index="0"]
 layer_0/tile_data = PackedInt32Array(65535, 131074, 0, 65534, 131074, 0)

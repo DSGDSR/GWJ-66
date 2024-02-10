@@ -10,6 +10,7 @@ class_name TileObject
 
 var _last_pos: Vector2
 var _first_event_emitted: bool = true
+var _animation_tween: Tween
 
 
 func _ready() -> void:
@@ -21,8 +22,9 @@ func interact() -> void:
 
 
 func move(dir: Vector2):
+	var pos = _parent.position + dir * Constants.TILE_SIZE
 	_last_pos = _parent.position
-	_parent.position += dir * Constants.TILE_SIZE
+	_animation_tween = Utils.animate_position(_parent, pos)
 
 
 func _on_body_entered(_body) -> void:
@@ -30,5 +32,10 @@ func _on_body_entered(_body) -> void:
 		_first_event_emitted = false
 		return
 
-	HistoryManager.step_back()
+	if _animation_tween:
+		_animation_tween.kill()
+		_animation_tween = null
+		Utils.get_player().cancel_movement()
+		HistoryManager.step_back()
+
 	_parent.position = _last_pos
