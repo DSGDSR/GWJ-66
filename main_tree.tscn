@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cq00mmmyscw65"]
+[gd_scene load_steps=16 format=3 uid="uid://cq00mmmyscw65"]
 
 [ext_resource type="Script" path="res://scripts/menu/Controls.gd" id="1_kuwp6"]
 [ext_resource type="Script" path="res://main_tree.gd" id="1_sut5g"]
@@ -9,10 +9,9 @@
 [ext_resource type="PackedScene" uid="uid://jvc43lqdm45i" path="res://components/OptionsTabs.tscn" id="6_rhhv7"]
 [ext_resource type="Script" path="res://scripts/NotificationManager.gd" id="8_8fdfs"]
 [ext_resource type="Script" path="res://scripts/Debug.gd" id="8_g7uam"]
-[ext_resource type="TileSet" uid="uid://d01t8lxlxav4n" path="res://tiletest.tres" id="8_n6lx3"]
 [ext_resource type="PackedScene" uid="uid://m56h5p44l5nw" path="res://entities/Player/Player.tscn" id="9_k548v"]
+[ext_resource type="Script" path="res://classes/TileLevel.gd" id="9_kgfcw"]
 [ext_resource type="Script" path="res://scripts/ConfirmationModal.gd" id="9_xo8ke"]
-[ext_resource type="PackedScene" uid="uid://bunyujnl835c" path="res://components/InteractiveObject.tscn" id="12_s07r8"]
 
 [sub_resource type="SystemFont" id="SystemFont_3xdlh"]
 
@@ -27,12 +26,6 @@ func _process(delta) -> void:
 	if visible:
 		text = \"%d FPS\" % Engine.get_frames_per_second()
 "
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kj3m5"]
-size = Vector2(62, 62)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8dey7"]
-size = Vector2(62, 94)
 
 [node name="MainTree" type="Node2D"]
 script = ExtResource("1_sut5g")
@@ -182,37 +175,16 @@ size_flags_horizontal = 8
 [node name="Game" type="Node2D" parent="."]
 position = Vector2(320, 180)
 
-[node name="TileMap" type="TileMap" parent="Game"]
-tile_set = ExtResource("8_n6lx3")
+[node name="LevelContainer" type="TileMap" parent="Game"]
+position = Vector2(-32, 32)
 format = 2
-layer_0/name = "floor"
-layer_1/name = "objects"
-layer_1/z_index = 1
-layer_1/tile_data = PackedInt32Array()
+layer_0/tile_data = PackedInt32Array(-262148, 2, 2, -196612, 2, 2, -131076, 2, 2, -65540, 2, 2, -4, 2, 2, 65532, 2, 2, 131068, 2, 2, -262147, 2, 2, -196611, 2, 2, -131075, 2, 2, -65539, 2, 2, -3, 2, 2, 65533, 2, 2, 131069, 2, 2, -327684, 2, 2, -327683, 2, 2, -327682, 2, 2, -262146, 2, 2, -327681, 2, 2, -262145, 2, 2, -393216, 2, 2, -327680, 2, 2, -393215, 2, 2, -327679, 2, 2, -393214, 2, 2, -327678, 2, 2, -393213, 2, 2, -327677, 2, 2, -393212, 2, 2, -327676, 2, 2, -262140, 2, 2, -196604, 262146, 2, -131068, 2, 2, -65532, 2, 2, 4, 2, 2, 65540, 2, 2, -393211, 2, 2, -327675, 2, 2, -262139, 2, 2, -196603, 2, 2, -131067, 2, 2, -65531, 2, 2, 5, 2, 2, 65541, 2, 2, 196604, 2, 2, 196605, 2, 2, 131070, 2, 2, 196606, 2, 2, 131071, 2, 2, 196607, 2, 2, 65536, 2, 2, 131072, 2, 2, 65537, 2, 2, 131073, 2, 2, 65538, 2, 2, 131074, 2, 2, 65539, 2, 2, 131075, 2, 2, 131076, 2, 2, 131077, 2, 2)
+script = ExtResource("9_kgfcw")
 
-[node name="Player" parent="Game/TileMap" instance=ExtResource("9_k548v")]
-z_index = 1
-position = Vector2(-320, -160)
+[node name="Level" type="Node2D" parent="Game/LevelContainer" groups=["Level"]]
 
-[node name="Table" parent="Game/TileMap" instance=ExtResource("12_s07r8")]
-position = Vector2(-96, -96)
-
-[node name="TileObject" parent="Game/TileMap/Table" index="0"]
-custom_name = "Table"
-
-[node name="CollisionShape2D" parent="Game/TileMap/Table" index="1"]
-position = Vector2(32, 32)
-shape = SubResource("RectangleShape2D_kj3m5")
-
-[node name="Bed" parent="Game/TileMap" instance=ExtResource("12_s07r8")]
-
-[node name="TileObject" parent="Game/TileMap/Bed" index="0"]
-layer_0/tile_data = PackedInt32Array(0, 65537, 1, 65536, 65537, 1, 65537, 65537, 1, 1, 65537, 1, 131072, 65537, 1, 131073, 65537, 1)
-custom_name = "Bed"
-
-[node name="CollisionShape2D" parent="Game/TileMap/Bed" index="1"]
-position = Vector2(32, 48)
-shape = SubResource("RectangleShape2D_8dey7")
+[node name="Player" parent="Game/LevelContainer" instance=ExtResource("9_k548v")]
+position = Vector2(0, -64)
 
 [node name="Scripts" type="Node" parent="."]
 
@@ -230,6 +202,3 @@ initial_position = 2
 [connection signal="pressed" from="Controls/Menu/Start/Buttons/Quit" to="Controls/Menu" method="_quit"]
 [connection signal="canceled" from="Scripts/ConfirmationModal/ConfirmationDialog" to="Scripts/ConfirmationModal" method="_on_confirmation_dialog_canceled"]
 [connection signal="confirmed" from="Scripts/ConfirmationModal/ConfirmationDialog" to="Scripts/ConfirmationModal" method="_on_confirmed"]
-
-[editable path="Game/TileMap/Table"]
-[editable path="Game/TileMap/Bed"]

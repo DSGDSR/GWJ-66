@@ -10,4 +10,6 @@ func _process(_delta) -> void:
 	var player = get_tree().get_nodes_in_group("Player")[0]
 	_interaction.text = "Is interacting: " + str(player.is_interacting)
 	_direction.text = "Direction: " + str(player.direction)
-	_object.text = "Object: " + str(player.object.custom_name if player.object else "None")
+	_object.text = (
+		"Object: " + str(player.object.custom_name if (player && player.object) else "None")
+	)

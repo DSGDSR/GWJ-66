@@ -2,7 +2,7 @@ extends Area2D
 
 class_name Player
 
-@onready var ray = $RayCast2D
+@onready var _ray = $RayCast2D
 
 var direction: Vector2 = Vector2.DOWN
 var object: TileObject = null
@@ -13,17 +13,25 @@ var interaction_dir: Enums.AXIS
 func move(input: String) -> void:
 	var dir = Constants.INPUTS[input]
 
-	ray.target_position = dir * Constants.TILE_SIZE
-	ray.force_raycast_update()
+	_ray.target_position = dir * Constants.TILE_SIZE
+	_ray.force_raycast_update()
 	direction = dir
 
 	if !is_interacting:
-		if !ray.is_colliding():
+		if !_ray.is_colliding():
 			_move(dir)
 		_detect_collision()
 	elif _can_move_with_object(dir):
 		_move(dir)
 		object.move(dir)
+
+
+func reset() -> void:
+	# position = Vector2.ZERO TODO inherit position from level info
+	_ray.force_raycast_update()
+	object = null
+	is_interacting = false
+	interaction_dir = Enums.AXIS.Y
 
 
 func _move(dir: Vector2) -> void:
@@ -53,8 +61,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _detect_collision() -> void:
-	ray.force_raycast_update()
-	var collider = ray.get_collider()
+	_ray.force_raycast_update()
+	var collider = _ray.get_collider()
 	if collider is TileObject:
 		object = collider as TileObject
 	else:
@@ -64,5 +72,5 @@ func _detect_collision() -> void:
 func _can_move_with_object(dir: Vector2) -> bool:
 	return (
 		Constants.DIRECTION_TO_AXIS[dir] == interaction_dir
-		&& (!ray.is_colliding() || ray.get_collider() == object)
+		&& (!_ray.is_colliding() || _ray.get_collider() == object)
 	)
