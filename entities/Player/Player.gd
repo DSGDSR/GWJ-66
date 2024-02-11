@@ -3,6 +3,7 @@ extends Area2D
 class_name Player
 
 @onready var _ray = $RayCast2D
+@onready var _sprite = $Sprite2D
 
 # Properties to be saved
 var direction: Vector2 = Vector2.ZERO
@@ -14,7 +15,7 @@ var _moving = false
 var _animation_tween: Tween
 
 
-func move(input: String, animation_time: float, save := true) -> void:
+func move(input: String, animation_time: float, undo := false) -> void:
 	if _moving:
 		return
 
@@ -33,16 +34,26 @@ func move(input: String, animation_time: float, save := true) -> void:
 		_detect_collision()
 	elif _can_move_with_object(direction):
 		_move(direction, animation_time)
-		object.move(direction, animation_time, save)
+		object.move(direction, animation_time, undo)
 
-	if save:
+	if !undo:
 		_save_state()
+
+	if is_interacting && !undo:
+		update_direction(prev_direction)
+
+	_update_sprite_frame()
 
 
 func update_direction(dir: Vector2) -> void:
 	direction = dir
 	_ray.target_position = dir * Constants.TILE_SIZE
 	_ray.force_raycast_update()
+
+
+func _update_sprite_frame() -> void:
+	var frame = Constants.DIRECTION_TO_FRAME[direction]
+	_sprite.frame = frame + (4 if is_interacting else 0)
 
 
 func reset() -> void:
@@ -77,12 +88,7 @@ func _move(dir: Vector2, animation_time: float, detect_collision = false) -> voi
 
 func _input(event: InputEvent) -> void:
 	if event && event.is_action_pressed("interact"):
-		if object and !is_interacting:
-			object.interact()
-			is_interacting = true
-			interaction_dir = Constants.DIRECTION_TO_AXIS[direction]
-		elif is_interacting:
-			is_interacting = false
+		_interact()
 		get_viewport().set_input_as_handled()
 	elif Input.is_action_pressed("undo") && !_moving:
 		HistoryManager.undo()
@@ -95,6 +101,20 @@ func _handle_move() -> void:
 	for dir in Constants.INPUTS.keys():
 		if Input.is_action_pressed(dir):
 			move(dir, Constants.ANIMATION_TIME)
+
+
+func _interact() -> void:
+	if !object:
+		return
+
+	if !is_interacting:
+		object.interact()
+		is_interacting = true
+		interaction_dir = Constants.DIRECTION_TO_AXIS[direction]
+	elif is_interacting:
+		is_interacting = false
+	_update_sprite_frame()
+	_save_state()
 
 
 func _detect_collision() -> void:
