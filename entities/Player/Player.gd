@@ -4,6 +4,7 @@ class_name Player
 
 @onready var _ray = $RayCast2D
 
+# Properties to be saved
 var direction: Vector2 = Vector2.ZERO
 var object: TileObject = null
 var is_interacting: bool = false
@@ -106,7 +107,11 @@ func _detect_collision() -> void:
 
 
 func _can_move_with_object(dir: Vector2) -> bool:
-	print(Constants.DIRECTION_TO_AXIS[dir] == interaction_dir, _ray.is_colliding(), _ray.get_collider() == object)
+	print(
+		Constants.DIRECTION_TO_AXIS[dir] == interaction_dir,
+		_ray.is_colliding(),
+		_ray.get_collider() == object
+	)
 	return (
 		Constants.DIRECTION_TO_AXIS[dir] == interaction_dir
 		&& (!_ray.is_colliding() || _ray.get_collider() == object)
@@ -114,22 +119,6 @@ func _can_move_with_object(dir: Vector2) -> bool:
 
 
 func _save_state() -> void:
-	print(
-		(
-			"SAVE: Is interacting: "
-			+ str(is_interacting)
-			+ " | Direction: "
-			+ str(direction)
-			+ " | Position: "
-			+ str(position)
-		)
-	)
 	HistoryManager.add_to_history(
-		{
-			"direction": direction,
-			"interacting": is_interacting,
-			"interacting_dir": interaction_dir,
-			"position": position,
-			"object": object
-		}
+		PlayerHistory.new(direction, object, is_interacting, interaction_dir, position)
 	)

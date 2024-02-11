@@ -2,10 +2,10 @@ extends Node
 
 @onready var _player := Utils.get_player()
 
-var _history: Array[Dictionary] = []
+var _history: Array[Node] = []
 
 
-func add_to_history(pos: Dictionary) -> void:
+func add_to_history(pos: Node) -> void:
 	_history.append(pos)
 
 
@@ -21,7 +21,7 @@ func clear_history() -> void:
 		_history.clear()
 
 
-func remove_last() -> Dictionary:
+func remove_last() -> Node:
 	return _history.pop_back()
 
 
@@ -35,26 +35,23 @@ func undo() -> void:
 	if _history.size() > 0:
 		# Get player back to previous position with animation
 		var last = remove_last()
+		if last is PlayerHistory:
+			# If last is a PlayerHistory, we need to undo the player's state
+			_undo_player(last)
+		else:
+			# If last is a Node, we need to undo the object's state
+			pass
 
-		print(
-			(
-				"SAVE: Is interacting: "
-				+ str(last.interacting)
-				+ " | Direction: "
-				+ str(last.direction)
-				+ " | Position: "
-				+ str(last.position)
-			)
-		)
 
-		_player.is_interacting = last.interacting
-		_player.interaction_dir = last.interacting_dir
-		_player.object = last.object
-		if last.position != _player.position:
-			var last_movement = Constants.INPUTS.find_key(Vector2.ZERO - last.direction)
-			_player.move(last_movement, Constants.UNDO_ANIMATION_TIME, false)
+func _undo_player(last: PlayerHistory) -> void:
+	_player.is_interacting = last.is_interacting
+	_player.interaction_dir = last.interaction_dir
+	_player.object = last.object
+	if last.position != _player.position:
+		var last_movement = Constants.INPUTS.find_key(Vector2.ZERO - last.direction)
+		_player.move(last_movement, Constants.UNDO_ANIMATION_TIME, false)
 
-		var previous = get_last()
-		var prev_direction = previous.direction if previous else Vector2.ZERO
-		_player.direction = prev_direction
-		_player.update_direction(prev_direction)
+	var previous = get_last()
+	var prev_direction = previous.direction if previous else Vector2.ZERO
+	_player.direction = prev_direction
+	_player.update_direction(prev_direction)
