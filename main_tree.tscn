@@ -157,6 +157,9 @@ script = ExtResource("9_kgfcw")
 visible = false
 position = Vector2(-32, -32)
 
+[node name="LevelTimer" type="Timer" parent="Game/LevelContainer" groups=["Timer"]]
+wait_time = 0.1
+
 [node name="Scripts" type="Node" parent="."]
 
 [node name="NotificationManager" type="Node" parent="Scripts"]

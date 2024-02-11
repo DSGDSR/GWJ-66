@@ -33,7 +33,7 @@ func move(input: String, animation_time: float, save := true) -> void:
 		_detect_collision()
 	elif _can_move_with_object(direction):
 		_move(direction, animation_time)
-		object.move(direction, animation_time)
+		object.move(direction, animation_time, save)
 
 	if save:
 		_save_state()
@@ -107,11 +107,6 @@ func _detect_collision() -> void:
 
 
 func _can_move_with_object(dir: Vector2) -> bool:
-	print(
-		Constants.DIRECTION_TO_AXIS[dir] == interaction_dir,
-		_ray.is_colliding(),
-		_ray.get_collider() == object
-	)
 	return (
 		Constants.DIRECTION_TO_AXIS[dir] == interaction_dir
 		&& (!_ray.is_colliding() || _ray.get_collider() == object)
