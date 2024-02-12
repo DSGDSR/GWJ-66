@@ -5,6 +5,10 @@ func get_player() -> Player:
 	return get_tree().get_first_node_in_group("Player")
 
 
+func get_menu() -> Control:
+	return get_tree().get_first_node_in_group("Menu")
+
+
 func vector_is_null(v: Vector2) -> bool:
 	return v.x == 0 && v.y == 0
 

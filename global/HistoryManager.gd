@@ -16,7 +16,7 @@ func get_last():
 		return null
 
 
-func clear_history() -> void:
+func clear() -> void:
 	if _history.size() > 0:
 		_history.clear()
 
@@ -55,3 +55,5 @@ func _undo_player(last: PlayerHistory) -> void:
 	var prev_direction = previous.direction if previous else Vector2.ZERO
 	_player.direction = prev_direction
 	_player.update_direction(prev_direction)
+	if !last.is_interacting:
+		_player._update_sprite_frame()

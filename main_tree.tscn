@@ -7,11 +7,11 @@
 [ext_resource type="Script" path="res://scripts/menu/Buttons.gd" id="3_p00e7"]
 [ext_resource type="Script" path="res://scripts/menu/Options.gd" id="5_7432s"]
 [ext_resource type="PackedScene" uid="uid://jvc43lqdm45i" path="res://components/OptionsTabs.tscn" id="6_rhhv7"]
-[ext_resource type="Script" path="res://scripts/NotificationManager.gd" id="8_8fdfs"]
 [ext_resource type="Script" path="res://scripts/Debug.gd" id="8_g7uam"]
 [ext_resource type="PackedScene" uid="uid://m56h5p44l5nw" path="res://entities/Player/Player.tscn" id="9_k548v"]
 [ext_resource type="Script" path="res://classes/TileLevel.gd" id="9_kgfcw"]
-[ext_resource type="Script" path="res://scripts/ConfirmationModal.gd" id="9_xo8ke"]
+[ext_resource type="Script" path="res://scripts/GameControls.gd" id="11_o6d74"]
+[ext_resource type="PackedScene" uid="uid://bkpnj5wysi3vs" path="res://components/ActionHint.tscn" id="12_yb401"]
 
 [node name="MainTree" type="Node2D"]
 script = ExtResource("1_sut5g")
@@ -21,7 +21,7 @@ metadata/_edit_horizontal_guides_ = [360.0]
 [node name="Controls" type="CanvasLayer" parent="."]
 script = ExtResource("1_kuwp6")
 
-[node name="Menu" type="Control" parent="Controls"]
+[node name="Menu" type="Control" parent="Controls" groups=["Menu"]]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -160,19 +160,33 @@ position = Vector2(-32, -32)
 [node name="LevelTimer" type="Timer" parent="Game/LevelContainer" groups=["Timer"]]
 wait_time = 0.1
 
+[node name="GameControls" type="CanvasLayer" parent="Game"]
+script = ExtResource("11_o6d74")
+
+[node name="Actions" type="MarginContainer" parent="Game/GameControls"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 112.0
+grow_vertical = 0
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ActionList" type="VBoxContainer" parent="Game/GameControls/Actions"]
+layout_mode = 2
+
+[node name="Interact" parent="Game/GameControls/Actions/ActionList" instance=ExtResource("12_yb401")]
+layout_mode = 2
+label = "INTERACT"
+
+[node name="Undo" parent="Game/GameControls/Actions/ActionList" instance=ExtResource("12_yb401")]
+layout_mode = 2
+frame = 2
+label = "UNDO"
+
 [node name="Scripts" type="Node" parent="."]
-
-[node name="NotificationManager" type="Node" parent="Scripts"]
-script = ExtResource("8_8fdfs")
-
-[node name="ConfirmationModal" type="Node" parent="Scripts"]
-script = ExtResource("9_xo8ke")
-
-[node name="ConfirmationDialog" type="ConfirmationDialog" parent="Scripts/ConfirmationModal"]
-initial_position = 2
 
 [connection signal="pressed" from="Controls/Menu/Start/Buttons/Start" to="Controls/Menu" method="_start"]
 [connection signal="pressed" from="Controls/Menu/Start/Buttons/Options" to="Controls/Menu" method="_toggle_options" binds= [true]]
 [connection signal="pressed" from="Controls/Menu/Start/Buttons/Quit" to="Controls/Menu" method="_quit"]
-[connection signal="canceled" from="Scripts/ConfirmationModal/ConfirmationDialog" to="Scripts/ConfirmationModal" method="_on_confirmation_dialog_canceled"]
-[connection signal="confirmed" from="Scripts/ConfirmationModal/ConfirmationDialog" to="Scripts/ConfirmationModal" method="_on_confirmed"]

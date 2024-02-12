@@ -9,6 +9,8 @@ var _current_level: Enums.LEVELS
 var _time := 0.0
 var _movements := 0
 
+var GAME_STATE = Enums.GAME_STATE.START_MENU
+
 
 func load_level(level: Enums.LEVELS = Enums.LEVELS.Tutorial):
 	_current_level = level
@@ -19,11 +21,13 @@ func load_level(level: Enums.LEVELS = Enums.LEVELS.Tutorial):
 	)
 	_level_container.add_child(new_level)
 	_player.set_snapped_position(new_level.player_position)
-	_player.visible = true
+	_player.reset()
+	GAME_STATE = Enums.GAME_STATE.GAME_ONGOING
 	# _start_timer() TODO Do we want to have a timer?
 
 
 func restart() -> void:
+	HistoryManager.clear()
 	_remove_current_level()
 	load_level(_current_level)
 	_player.reset()

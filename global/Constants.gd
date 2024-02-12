@@ -27,22 +27,6 @@ const DIRECTION_TO_FRAME: Dictionary = {
 	Vector2.LEFT: Enums.PLAYER_FRAMES.LEFT
 }
 
-const WINDOW_MODE_LABEL: Dictionary = {
-	Enums.WINDOW_MODE.FULLSCREEN: "Fullscreen",
-	Enums.WINDOW_MODE.WINDOW: "Window",
-	Enums.WINDOW_MODE.BORDERLESS_FS: "Borderless fullscreen",
-	Enums.WINDOW_MODE.BORDERLESS_WINDOW: "Borderless window",
-}
-
-const WINDOW_RESOLUTION: Dictionary = {
-	"2560 × 1440": Vector2i(2560, 1440),
-	"1920 x 1080": Vector2i(1920, 1080),
-	"1600 x 900": Vector2i(1600, 900),
-	"1280 x 720": Vector2i(1280, 720),
-	"960 x 540": Vector2i(960, 540),
-	"640 x 360": Vector2i(640, 360)
-}
-
 const GAME_INPUTS: Dictionary = {
 	"ui_accept": "Accept (UI)",
 	"ui_cancel": "Go back (UI)",

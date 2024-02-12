@@ -24,6 +24,7 @@ HistoryManager="*res://global/HistoryManager.gd"
 Utils="*res://global/Utils.gd"
 Constants="*res://global/Constants.gd"
 LevelManager="*res://global/LevelManager.gd"
+InputManager="*res://global/InputManager.gd"
 
 [display]
 

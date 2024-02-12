@@ -2,6 +2,9 @@ extends Area2D
 
 class_name Player
 
+signal moved
+signal interacted(state: bool)
+
 @onready var _ray = $RayCast2D
 @onready var _sprite = $Sprite2D
 
@@ -34,7 +37,7 @@ func move(input: String, animation_time: float, undo := false) -> void:
 		_detect_collision()
 	elif _can_move_with_object(direction):
 		_move(direction, animation_time)
-		object.move(direction, animation_time, undo)
+		object.move(direction, animation_time, !undo)
 
 	if !undo:
 		_save_state()
@@ -57,11 +60,12 @@ func _update_sprite_frame() -> void:
 
 
 func reset() -> void:
-	# position = Vector2.ZERO TODO inherit position from level info
-	_ray.force_raycast_update()
+	visible = true
 	object = null
 	is_interacting = false
 	interaction_dir = Enums.AXIS.Y
+	update_direction(Vector2.ZERO)
+	_update_sprite_frame()
 
 
 func set_snapped_position(pos: Vector2) -> void:
@@ -83,18 +87,9 @@ func _move(dir: Vector2, animation_time: float, detect_collision = false) -> voi
 	_moving = true
 	_animation_tween = Utils.animate_position(self, pos, animation_time, true)
 	if detect_collision:
-		_animation_tween.finished.connect(_detect_collision)
-
-
-func _input(event: InputEvent) -> void:
-	if event && event.is_action_pressed("interact"):
-		_interact()
-		get_viewport().set_input_as_handled()
-	elif Input.is_action_pressed("undo") && !_moving:
-		HistoryManager.undo()
-		get_viewport().set_input_as_handled()
+		_animation_tween.finished.connect(_on_animation_finished)
 	else:
-		_handle_move()
+		moved.emit()
 
 
 func _handle_move() -> void:
@@ -111,10 +106,11 @@ func _interact() -> void:
 		object.interact()
 		is_interacting = true
 		interaction_dir = Constants.DIRECTION_TO_AXIS[direction]
+		_save_state()
 	elif is_interacting:
 		is_interacting = false
+	interacted.emit(is_interacting)
 	_update_sprite_frame()
-	_save_state()
 
 
 func _detect_collision() -> void:
@@ -124,6 +120,12 @@ func _detect_collision() -> void:
 		object = collider as TileObject
 	else:
 		object = null
+	moved.emit()
+
+
+func _on_animation_finished() -> void:
+	_detect_collision()
+	moved.emit()
 
 
 func _can_move_with_object(dir: Vector2) -> bool:
