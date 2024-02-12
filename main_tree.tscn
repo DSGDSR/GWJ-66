@@ -31,15 +31,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_0bial")
 
-[node name="Start" type="Control" parent="Controls/Menu"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Buttons" type="VBoxContainer" parent="Controls/Menu/Start"]
+[node name="Buttons" type="VBoxContainer" parent="Controls/Menu"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -53,22 +45,21 @@ grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("3_p00e7")
 
-[node name="Start" type="Button" parent="Controls/Menu/Start/Buttons"]
+[node name="Start" type="Button" parent="Controls/Menu/Buttons"]
 layout_mode = 2
-text = "Start"
+text = "Select level"
 
-[node name="Options" type="Button" parent="Controls/Menu/Start/Buttons"]
+[node name="Restart" type="Button" parent="Controls/Menu/Buttons"]
+layout_mode = 2
+text = "Restart"
+
+[node name="Options" type="Button" parent="Controls/Menu/Buttons"]
 layout_mode = 2
 text = "Options"
 
-[node name="Quit" type="Button" parent="Controls/Menu/Start/Buttons"]
+[node name="Quit" type="Button" parent="Controls/Menu/Buttons"]
 layout_mode = 2
 text = "Quit"
-
-[node name="Pause" type="Control" parent="Controls/Menu"]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="Options" type="Control" parent="Controls/Menu"]
 layout_mode = 1
@@ -82,7 +73,7 @@ script = ExtResource("5_7432s")
 [node name="TabsContainer" parent="Controls/Menu/Options" instance=ExtResource("6_rhhv7")]
 layout_mode = 1
 
-[node name="Splash" type="Control" parent="Controls"]
+[node name="Splash" type="Control" parent="Controls" groups=["Splash"]]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -114,6 +105,7 @@ grow_vertical = 2
 expand_mode = 2
 
 [node name="Debug" type="Control" parent="Controls"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -144,7 +136,8 @@ size_flags_horizontal = 8
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Game" type="Node2D" parent="."]
+[node name="Game" type="Node2D" parent="." groups=["Game"]]
+visible = false
 
 [node name="LevelContainer" type="TileMap" parent="Game"]
 format = 2
@@ -161,6 +154,7 @@ position = Vector2(-32, -32)
 wait_time = 0.1
 
 [node name="GameControls" type="CanvasLayer" parent="Game"]
+visible = false
 script = ExtResource("11_o6d74")
 
 [node name="Actions" type="MarginContainer" parent="Game/GameControls"]
@@ -187,6 +181,7 @@ label = "UNDO"
 
 [node name="Scripts" type="Node" parent="."]
 
-[connection signal="pressed" from="Controls/Menu/Start/Buttons/Start" to="Controls/Menu" method="_start"]
-[connection signal="pressed" from="Controls/Menu/Start/Buttons/Options" to="Controls/Menu" method="_toggle_options" binds= [true]]
-[connection signal="pressed" from="Controls/Menu/Start/Buttons/Quit" to="Controls/Menu" method="_quit"]
+[connection signal="pressed" from="Controls/Menu/Buttons/Start" to="Controls/Menu" method="_start"]
+[connection signal="pressed" from="Controls/Menu/Buttons/Restart" to="Controls/Menu" method="_restart"]
+[connection signal="pressed" from="Controls/Menu/Buttons/Options" to="Controls/Menu" method="_toggle_options" binds= [true]]
+[connection signal="pressed" from="Controls/Menu/Buttons/Quit" to="Controls/Menu" method="_quit"]

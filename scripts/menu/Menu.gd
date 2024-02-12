@@ -1,37 +1,59 @@
 extends Control
 
-var menu_state
-
-@onready var options = $Options
-
-
-func _ready() -> void:
-	menu_state = Enums.MENU_STATE.START
+@onready var _options = $Options
+@onready var _buttons = $Buttons
 
 
-func cancel() -> void:
-	if options.visible || visible:
-		get_viewport().set_input_as_handled()
-		if options.visible:
-			_toggle_options(false)
-		elif menu_state == Enums.MENU_STATE.PAUSE:
-			visible = false
+func toggle() -> void:
+	if LevelManager.GAME_STATE == Enums.GAME_STATE.START_MENU:
+		return
+
+	if visible:
+		_hide()
 	else:
-		visible = true
-		menu_state = Enums.MENU_STATE.PAUSE
+		_pause()
+
+
+func back() -> void:
+	if _options.visible:
+		_toggle_options(false)
+	elif LevelManager.GAME_STATE == Enums.GAME_STATE.PAUSE_MENU:
+		_hide()
+
+
+func _pause() -> void:
+	visible = true
+	_options.visible = false
+	LevelManager.GAME_STATE = Enums.GAME_STATE.PAUSE_MENU
+	_buttons.get_children()[0].grab_focus()
+
+
+func _hide() -> void:
+	visible = false
+	_options.visible = false
+	LevelManager.GAME_STATE = Enums.GAME_STATE.GAME_ONGOING
 
 
 func _toggle_options(state: bool) -> void:
-	options.visible = state
+	_options.visible = state
 
 
 func _start() -> void:
 	visible = false
-	if menu_state == Enums.MENU_STATE.START:
+	if LevelManager.GAME_STATE == Enums.GAME_STATE.START_MENU:
 		LevelManager.load_level()
 	else:
-		LevelManager.restart()
+		LevelManager.GAME_STATE = Enums.GAME_STATE.GAME_ONGOING
+
+
+func _restart() -> void:
+	visible = false
+	LevelManager.restart()
 
 
 func _quit() -> void:
-	get_tree().quit()
+	if LevelManager.GAME_STATE == Enums.GAME_STATE.START_MENU:
+		get_tree().quit()
+	else:
+		LevelManager.quit()
+		LevelManager.GAME_STATE = Enums.GAME_STATE.START_MENU

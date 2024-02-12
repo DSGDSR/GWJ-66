@@ -9,23 +9,34 @@ var _device = Enums.DEVICE.KEYBOARD
 
 
 func _input(event: InputEvent) -> void:
-	# DETECT DEVICE
-	if event is InputEventKey || event is InputEventMouse:
-		_change_device(Enums.DEVICE.KEYBOARD)
-	elif event is InputEventJoypadButton:
-		_change_device(Enums.DEVICE.GAMEPAD)
+	_detect_device(event)
 
-	# CONTROLS
-	if (
-		LevelManager.GAME_STATE == Enums.GAME_STATE.START_MENU
-		|| LevelManager.GAME_STATE == Enums.GAME_STATE.PAUSE_MENU
-	):
+	# MENU CONTROLS
+	if LevelManager.GAME_STATE == Enums.GAME_STATE.SPLASH:
+		if event.is_action_pressed("ui_accept") || event.is_action_pressed("ui_cancel"):
+			get_tree().get_first_node_in_group("Splash").stop()
+			get_viewport().set_input_as_handled()
+	elif LevelManager.GAME_STATE == Enums.GAME_STATE.START_MENU:
+		if event.is_action_pressed("ui_cancel") || event.is_action_pressed("ui_back"):
+			_menu.back()
+	elif LevelManager.GAME_STATE == Enums.GAME_STATE.PAUSE_MENU:
 		if event.is_action_pressed("ui_cancel"):
-			_menu.cancel()
+			_menu.toggle()
+			get_viewport().set_input_as_handled()
+		elif event.is_action_pressed("ui_back"):
+			_menu.back()
+			get_viewport().set_input_as_handled()
+
+	# LEVEL SELECTION
 	elif LevelManager.GAME_STATE == Enums.GAME_STATE.GAME_SELECTION:
 		pass
+
+	# GAME CONTROLS
 	elif LevelManager.GAME_STATE == Enums.GAME_STATE.GAME_ONGOING:
-		if event && event.is_action_pressed("interact"):
+		if event.is_action_pressed("ui_cancel"):
+			_menu.toggle()
+			get_viewport().set_input_as_handled()
+		elif event && event.is_action_pressed("interact"):
 			_player._interact()
 			get_viewport().set_input_as_handled()
 		elif Input.is_action_pressed("undo") && !_player._moving:
@@ -33,6 +44,14 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		else:
 			_player._handle_move()
+
+
+func _detect_device(event: InputEvent) -> void:
+	# DETECT DEVICE
+	if event is InputEventKey || event is InputEventMouse:
+		_change_device(Enums.DEVICE.KEYBOARD)
+	elif event is InputEventJoypadButton:
+		_change_device(Enums.DEVICE.GAMEPAD)
 
 
 func _change_device(device: Enums.DEVICE) -> void:

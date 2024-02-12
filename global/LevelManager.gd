@@ -2,14 +2,15 @@ extends Node
 
 # Level container
 @onready var _level_container: Node2D = get_tree().get_first_node_in_group("Level")
-@onready var _player: Player = get_tree().get_first_node_in_group("Player")
+@onready var _player: Player = Utils.get_player()
 @onready var _timer: Timer = get_tree().get_first_node_in_group("Timer")
+@onready var _game: Node2D = get_tree().get_first_node_in_group("Game")
 
 var _current_level: Enums.LEVELS
 var _time := 0.0
 var _movements := 0
 
-var GAME_STATE = Enums.GAME_STATE.START_MENU
+var GAME_STATE = Enums.GAME_STATE.SPLASH
 
 
 func load_level(level: Enums.LEVELS = Enums.LEVELS.Tutorial):
@@ -23,14 +24,30 @@ func load_level(level: Enums.LEVELS = Enums.LEVELS.Tutorial):
 	_player.set_snapped_position(new_level.player_position)
 	_player.reset()
 	GAME_STATE = Enums.GAME_STATE.GAME_ONGOING
+	_toggle_game(true)
 	# _start_timer() TODO Do we want to have a timer?
 
 
 func restart() -> void:
+	_movements = 0
 	HistoryManager.clear()
-	_remove_current_level()
 	load_level(_current_level)
 	_player.reset()
+
+
+func quit() -> void:
+	_toggle_game(false)
+	_movements = 0
+	HistoryManager.clear()
+	_remove_current_level()
+	_player.visible = false
+
+
+func _toggle_game(state: bool) -> void:
+	var _game_actions = _game.get_child(1)
+	_game.visible = state
+	_game_actions.visible = state
+	_game_actions.refresh()
 
 
 func increase_movements(movements: int) -> void:

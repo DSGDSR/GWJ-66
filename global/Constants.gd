@@ -1,5 +1,7 @@
 extends Node
 
+const DEBUG = false
+
 const ANIMATION_TIME = 8.5
 const UNDO_ANIMATION_TIME = 15.0
 
