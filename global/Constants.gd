@@ -37,3 +37,7 @@ const GAME_INPUTS: Dictionary = {
 	"move_down": "Move down",
 	"move_left": "Move left",
 }
+
+const LEVELS_SCORES = {
+	Enums.LEVELS.Tutorial: {6: "Bien", 9: "Regular", 12: "Mal"},
+}

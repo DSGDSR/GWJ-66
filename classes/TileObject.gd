@@ -18,10 +18,6 @@ func _ready() -> void:
 	_parent.body_entered.connect(_on_body_entered)
 
 
-func interact() -> void:
-	print("interacting with " + custom_name)
-
-
 func move(dir: Vector2, animation_time: float, increase = MIDI_MESSAGE_TUNE_REQUEST) -> void:
 	_movement_action = Enums.MOVEMENT_ACTION.MOVE if increase else Enums.MOVEMENT_ACTION.UNDO
 	var pos = _parent.position + dir * Constants.TILE_SIZE

@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmqjsi046fkle"]
+[gd_scene load_steps=11 format=3 uid="uid://cmqjsi046fkle"]
 
 [ext_resource type="TileSet" uid="uid://d01t8lxlxav4n" path="res://tiletest.tres" id="1_fagrk"]
 [ext_resource type="PackedScene" uid="uid://bunyujnl835c" path="res://entities/InteractiveObject.tscn" id="1_pie5n"]
 [ext_resource type="Script" path="res://classes/TileLevel.gd" id="2_tme4o"]
+[ext_resource type="Script" path="res://classes/FinishArea.gd" id="4_m2sd5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8dey7"]
 size = Vector2(62, 94)
@@ -19,10 +20,19 @@ size = Vector2(30, 30)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_krkdu"]
 size = Vector2(62, 30)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kx6d3"]
+size = Vector2(16, 32)
+
 [node name="Tutorial" type="TileMap"]
+y_sort_enabled = true
 tile_set = ExtResource("1_fagrk")
 format = 2
-layer_0/tile_data = PackedInt32Array(131078, 2, 2, 196614, 2, 2, 262150, 2, 2, 327686, 2, 2, 393222, 2, 2, 458758, 2, 2, 524294, 2, 2, 524295, 2, 2, 524296, 2, 2, 524297, 2, 2, 524298, 2, 2, 524299, 2, 2, 524300, 2, 2, 524301, 2, 2, 458765, 2, 2, 393229, 2, 2, 327693, 2, 2, 327694, 2, 2, 262158, 2, 2, 196622, 2, 2, 196621, 2, 2, 131085, 2, 2, 131084, 2, 2, 131083, 2, 2, 131082, 2, 2, 131081, 2, 2, 131080, 2, 2, 131079, 2, 2, 262157, 2, 0)
+layer_0/tile_data = PackedInt32Array(524295, 786440, 3, 524296, 786440, 3, 524297, 786440, 3, 524298, 786440, 3, 524299, 786440, 3, 524300, 786440, 3, 458765, 851976, 2, 393229, 851976, 2, 327693, 1048584, 15, 262157, 1048584, 14, 196621, 1048584, 13, 393222, 720904, 1, 458758, 720904, 2, 262150, 720904, 536870913, 196614, 720904, 2, 131079, 786440, 536870915, 131080, 786440, 536870915, 131081, 786440, 536870915, 131082, 786440, 536870915, 131083, 786440, 536870915, 131084, 786440, 536870915, 524301, 851976, 3, 524294, 720904, 3, 131078, 720904, 536870915, 131085, 851976, 536870915, 196615, 983048, 14, 262151, 983048, 14, 327687, 983048, 14, 393223, 983048, 14, 458759, 983048, 14, 196616, 983048, 14, 262152, 983048, 14, 327688, 983048, 14, 393224, 983048, 14, 458760, 983048, 14, 196617, 983048, 14, 262153, 983048, 14, 327689, 983048, 14, 393225, 983048, 14, 458761, 983048, 14, 196618, 983048, 14, 262154, 983048, 14, 327690, 983048, 14, 393226, 983048, 14, 458762, 983048, 14, 196619, 983048, 14, 262155, 983048, 14, 327691, 983048, 14, 393227, 983048, 14, 458763, 983048, 14, 196620, 983048, 14, 262156, 983048, 14, 327692, 983048, 14, 393228, 983048, 14, 458764, 983048, 14, 327686, 720904, 15)
+layer_1/tile_data = PackedInt32Array(327687, 786440, 15, 262157, 1048584, 14)
+layer_2/y_sort_enabled = true
+layer_2/y_sort_origin = 1
+layer_2/z_index = 2
+layer_2/tile_data = PackedInt32Array(262157, 1048584, 14)
 script = ExtResource("2_tme4o")
 player_position = Vector2(320, 180)
 
@@ -30,7 +40,7 @@ player_position = Vector2(320, 180)
 position = Vector2(352, 96)
 
 [node name="TileObject" parent="Bed" index="0"]
-layer_0/tile_data = PackedInt32Array(0, 262146, 1, 65536, 262146, 1, 65537, 262146, 1, 1, 262146, 1, 131072, 262146, 1, 131073, 262146, 1)
+layer_0/tile_data = PackedInt32Array(0, 5, 1, 65536, 5, 2, 65537, 65541, 2, 1, 65541, 1, 131072, 5, 3, 131073, 65541, 3)
 custom_name = "Bed"
 
 [node name="CollisionShape2D" parent="Bed" index="1"]
@@ -41,7 +51,8 @@ shape = SubResource("RectangleShape2D_8dey7")
 position = Vector2(288, 96)
 
 [node name="TileObject" parent="Table" index="0"]
-layer_0/tile_data = PackedInt32Array(0, 262146, 0, 1, 262146, 0, 65535, 262146, 0)
+layer_0/tile_data = PackedInt32Array(0, 393221, 0, 1, 458757, 0, 65535, 327685, 0)
+layer_1/tile_data = PackedInt32Array(0, 131077, 1)
 custom_name = "Table"
 
 [node name="CollisionShape2D" parent="Table" index="1"]
@@ -49,10 +60,10 @@ position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_kj3m5")
 
 [node name="Chair" parent="." instance=ExtResource("1_pie5n")]
-position = Vector2(320, 128)
+position = Vector2(288, 128)
 
 [node name="TileObject" parent="Chair" index="0"]
-layer_0/tile_data = PackedInt32Array(0, 131074, 3)
+layer_0/tile_data = PackedInt32Array(0, 5, 0)
 custom_name = "Chair"
 
 [node name="CollisionShape2D" parent="Chair" index="1"]
@@ -63,7 +74,7 @@ shape = SubResource("RectangleShape2D_4ou81")
 position = Vector2(352, 224)
 
 [node name="TileObject" parent="Lamp" index="0"]
-layer_0/tile_data = PackedInt32Array(1, 393218, 3)
+layer_0/tile_data = PackedInt32Array(1, 65541, 0)
 custom_name = "Lamp"
 
 [node name="CollisionShape2D" parent="Lamp" index="1"]
@@ -74,12 +85,21 @@ shape = SubResource("RectangleShape2D_kq878")
 position = Vector2(288, 224)
 
 [node name="TileObject" parent="Wardrobe" index="0"]
-layer_0/tile_data = PackedInt32Array(65535, 131074, 0, 65534, 131074, 0)
+layer_0/tile_data = PackedInt32Array(65535, 196613, 0, 65534, 131077, 0)
+layer_1/tile_data = PackedInt32Array(65534, 262149, 1610612736)
 custom_name = "Wardrobe"
 
 [node name="CollisionShape2D" parent="Wardrobe" index="1"]
 position = Vector2(-32, 16)
 shape = SubResource("RectangleShape2D_krkdu")
+
+[node name="Finish" type="Area2D" parent="."]
+position = Vector2(415, 128)
+script = ExtResource("4_m2sd5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Finish"]
+position = Vector2(24, 16)
+shape = SubResource("RectangleShape2D_kx6d3")
 
 [editable path="Bed"]
 [editable path="Table"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cq00mmmyscw65"]
+[gd_scene load_steps=16 format=3 uid="uid://cq00mmmyscw65"]
 
 [ext_resource type="Script" path="res://scripts/menu/Controls.gd" id="1_kuwp6"]
 [ext_resource type="Script" path="res://main_tree.gd" id="1_sut5g"]
@@ -11,18 +11,112 @@
 [ext_resource type="PackedScene" uid="uid://m56h5p44l5nw" path="res://entities/Player/Player.tscn" id="9_k548v"]
 [ext_resource type="Script" path="res://classes/TileLevel.gd" id="9_kgfcw"]
 [ext_resource type="Script" path="res://scripts/GameControls.gd" id="11_o6d74"]
+[ext_resource type="PackedScene" uid="uid://dgsfgrjy108ge" path="res://components/LevelButton.tscn" id="11_y5wbq"]
 [ext_resource type="PackedScene" uid="uid://bkpnj5wysi3vs" path="res://components/ActionHint.tscn" id="12_yb401"]
+
+[sub_resource type="GDScript" id="GDScript_0bskk"]
+script/source = "extends Control
+
+var _tween: Tween
+
+func stop() -> void:
+	if _tween:
+		_tween.kill()
+	visible = false
+
+
+func _ready():
+	visibility_changed.connect(_on_visibility_change)
+
+
+func _on_visibility_change() -> void:
+	if _tween:
+		_tween.kill()
+	
+	if visible:
+		$ScrollContainer.scroll_vertical = 0
+		_tween = get_tree().create_tween() 
+		_tween.tween_property($ScrollContainer, 'scroll_vertical', 225, 15)
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_yufte"]
+font_size = 24
 
 [node name="MainTree" type="Node2D"]
 script = ExtResource("1_sut5g")
 metadata/_edit_vertical_guides_ = [640.0]
 metadata/_edit_horizontal_guides_ = [360.0]
 
+[node name="Game" type="Node2D" parent="." groups=["Game"]]
+visible = false
+
+[node name="LevelContainer" type="TileMap" parent="Game"]
+format = 2
+layer_0/tile_data = PackedInt32Array(-262148, 2, 2, -196612, 2, 2, -131076, 2, 2, -65540, 2, 2, -4, 2, 2, 65532, 2, 2, 131068, 2, 2, -262147, 2, 2, -196611, 2, 2, -131075, 2, 2, -65539, 2, 2, -3, 2, 2, 65533, 2, 2, 131069, 2, 2, -327684, 2, 2, -327683, 2, 2, -327682, 2, 2, -262146, 2, 2, -327681, 2, 2, -262145, 2, 2, -393216, 2, 2, -327680, 2, 2, -393215, 2, 2, -327679, 2, 2, -393214, 2, 2, -327678, 2, 2, -393213, 2, 2, -327677, 2, 2, -393212, 2, 2, -327676, 2, 2, -262140, 2, 2, -196604, 262146, 2, -131068, 2, 2, -65532, 2, 2, 4, 2, 2, 65540, 2, 2, -393211, 2, 2, -327675, 2, 2, -262139, 2, 2, -196603, 2, 2, -131067, 2, 2, -65531, 2, 2, 5, 2, 2, 65541, 2, 2, 196604, 2, 2, 196605, 2, 2, 131070, 2, 2, 196606, 2, 2, 131071, 2, 2, 196607, 2, 2, 65536, 2, 2, 131072, 2, 2, 65537, 2, 2, 131073, 2, 2, 65538, 2, 2, 131074, 2, 2, 65539, 2, 2, 131075, 2, 2, 131076, 2, 2, 131077, 2, 2)
+script = ExtResource("9_kgfcw")
+
+[node name="Background" type="ColorRect" parent="Game/LevelContainer"]
+custom_minimum_size = Vector2(640, 360)
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0, 0, 0, 1)
+
+[node name="Level" type="Node2D" parent="Game/LevelContainer" groups=["Level"]]
+
+[node name="Player" parent="Game/LevelContainer" instance=ExtResource("9_k548v")]
+visible = false
+position = Vector2(-32, -32)
+
+[node name="LevelTimer" type="Timer" parent="Game/LevelContainer" groups=["Timer"]]
+wait_time = 0.1
+
+[node name="GameControls" type="CanvasLayer" parent="Game"]
+visible = false
+script = ExtResource("11_o6d74")
+
+[node name="Actions" type="MarginContainer" parent="Game/GameControls"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 112.0
+grow_vertical = 0
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="ActionList" type="VBoxContainer" parent="Game/GameControls/Actions"]
+layout_mode = 2
+
+[node name="Interact" parent="Game/GameControls/Actions/ActionList" instance=ExtResource("12_yb401")]
+layout_mode = 2
+label = "INTERACT"
+
+[node name="Undo" parent="Game/GameControls/Actions/ActionList" instance=ExtResource("12_yb401")]
+layout_mode = 2
+frame = 2
+label = "UNDO"
+
+[node name="Movements" type="MarginContainer" parent="Game/GameControls"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -113.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="MovementsLabel" type="Label" parent="Game/GameControls/Movements"]
+layout_mode = 2
+text = "0 movements"
+
 [node name="Controls" type="CanvasLayer" parent="."]
 script = ExtResource("1_kuwp6")
 
 [node name="Menu" type="Control" parent="Controls" groups=["Menu"]]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,18 +125,28 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_0bial")
 
+[node name="Background" type="ColorRect" parent="Controls/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.588235)
+
 [node name="Buttons" type="VBoxContainer" parent="Controls/Menu"]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -101.0
-offset_right = 40.0
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -63.0
+offset_right = 48.0
+offset_bottom = 63.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 script = ExtResource("3_p00e7")
 
 [node name="Start" type="Button" parent="Controls/Menu/Buttons"]
@@ -56,6 +160,10 @@ text = "Restart"
 [node name="Options" type="Button" parent="Controls/Menu/Buttons"]
 layout_mode = 2
 text = "Options"
+
+[node name="Credits" type="Button" parent="Controls/Menu/Buttons"]
+layout_mode = 2
+text = "Credits"
 
 [node name="Quit" type="Button" parent="Controls/Menu/Buttons"]
 layout_mode = 2
@@ -73,6 +181,31 @@ script = ExtResource("5_7432s")
 [node name="TabsContainer" parent="Controls/Menu/Options" instance=ExtResource("6_rhhv7")]
 layout_mode = 1
 
+[node name="Levels" type="Control" parent="Controls/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelGrid" type="GridContainer" parent="Controls/Menu/Levels"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.5
+offset_top = -11.0
+offset_right = 34.5
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tutorial" parent="Controls/Menu/Levels/LevelGrid" instance=ExtResource("11_y5wbq")]
+layout_mode = 2
+
 [node name="Splash" type="Control" parent="Controls" groups=["Splash"]]
 visible = false
 layout_mode = 3
@@ -82,7 +215,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_7020l")
-splash_screens = Array[String](["godot_jam.png"])
+splash_screens = Array[String](["dsgdsr.png", "godot_jam.png"])
 metadata/_edit_use_anchors_ = true
 
 [node name="SplashBackground" type="ColorRect" parent="Controls/Splash"]
@@ -136,52 +269,93 @@ size_flags_horizontal = 8
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Game" type="Node2D" parent="." groups=["Game"]]
+[node name="Credits" type="Control" parent="Controls"]
 visible = false
-
-[node name="LevelContainer" type="TileMap" parent="Game"]
-format = 2
-layer_0/tile_data = PackedInt32Array(-262148, 2, 2, -196612, 2, 2, -131076, 2, 2, -65540, 2, 2, -4, 2, 2, 65532, 2, 2, 131068, 2, 2, -262147, 2, 2, -196611, 2, 2, -131075, 2, 2, -65539, 2, 2, -3, 2, 2, 65533, 2, 2, 131069, 2, 2, -327684, 2, 2, -327683, 2, 2, -327682, 2, 2, -262146, 2, 2, -327681, 2, 2, -262145, 2, 2, -393216, 2, 2, -327680, 2, 2, -393215, 2, 2, -327679, 2, 2, -393214, 2, 2, -327678, 2, 2, -393213, 2, 2, -327677, 2, 2, -393212, 2, 2, -327676, 2, 2, -262140, 2, 2, -196604, 262146, 2, -131068, 2, 2, -65532, 2, 2, 4, 2, 2, 65540, 2, 2, -393211, 2, 2, -327675, 2, 2, -262139, 2, 2, -196603, 2, 2, -131067, 2, 2, -65531, 2, 2, 5, 2, 2, 65541, 2, 2, 196604, 2, 2, 196605, 2, 2, 131070, 2, 2, 196606, 2, 2, 131071, 2, 2, 196607, 2, 2, 65536, 2, 2, 131072, 2, 2, 65537, 2, 2, 131073, 2, 2, 65538, 2, 2, 131074, 2, 2, 65539, 2, 2, 131075, 2, 2, 131076, 2, 2, 131077, 2, 2)
-script = ExtResource("9_kgfcw")
-
-[node name="Level" type="Node2D" parent="Game/LevelContainer" groups=["Level"]]
-
-[node name="Player" parent="Game/LevelContainer" instance=ExtResource("9_k548v")]
-visible = false
-position = Vector2(-32, -32)
-
-[node name="LevelTimer" type="Timer" parent="Game/LevelContainer" groups=["Timer"]]
-wait_time = 0.1
-
-[node name="GameControls" type="CanvasLayer" parent="Game"]
-visible = false
-script = ExtResource("11_o6d74")
-
-[node name="Actions" type="MarginContainer" parent="Game/GameControls"]
-anchors_preset = 2
-anchor_top = 1.0
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -40.0
-offset_right = 112.0
-grow_vertical = 0
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_bottom = 15
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_0bskk")
 
-[node name="ActionList" type="VBoxContainer" parent="Game/GameControls/Actions"]
+[node name="Background" type="ColorRect" parent="Controls/Credits"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Controls/Credits"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -104.5
+offset_right = 104.5
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Controls/Credits/ScrollContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 25
+
+[node name="Separator" type="Control" parent="Controls/Credits/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="Interact" parent="Game/GameControls/Actions/ActionList" instance=ExtResource("12_yb401")]
+[node name="Label" type="Label" parent="Controls/Credits/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-label = "INTERACT"
+size_flags_horizontal = 4
+text = "CREDITS"
+label_settings = SubResource("LabelSettings_yufte")
 
-[node name="Undo" parent="Game/GameControls/Actions/ActionList" instance=ExtResource("12_yb401")]
+[node name="RichTextLabel" type="RichTextLabel" parent="Controls/Credits/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-frame = 2
-label = "UNDO"
+auto_translate = false
+bbcode_enabled = true
+text = "[center]
+DEVELOPMENT & GAME DESIGN
+
+[color=#999]- David Sanchez (DSGDSR)[/color]
+
+
+
+GAME ART
+
+[color=#999]- David Sanchez (DSGDSR)[/color]
+
+
+
+EXTERNAL ASSETS
+
+[color=#999]- Controller icons by actuallyKron
+- Keyboard icons by Crusenho[/color]
+
+
+
+USED WILDCARDS
+
+[color=#999]- Think inside the box[/color]
+
+
+
+Shoutout to [color=#FA6149]Godot Wild Jam[/color]
+
+*This is my first game and jam, but definitely not the last one*
+
+[/center]"
+fit_content = true
+autowrap_mode = 0
+
+[node name="Separator2" type="Control" parent="Controls/Credits/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
 
 [node name="Scripts" type="Node" parent="."]
-
-[connection signal="pressed" from="Controls/Menu/Buttons/Start" to="Controls/Menu" method="_start"]
-[connection signal="pressed" from="Controls/Menu/Buttons/Restart" to="Controls/Menu" method="_restart"]
-[connection signal="pressed" from="Controls/Menu/Buttons/Options" to="Controls/Menu" method="_toggle_options" binds= [true]]
-[connection signal="pressed" from="Controls/Menu/Buttons/Quit" to="Controls/Menu" method="_quit"]

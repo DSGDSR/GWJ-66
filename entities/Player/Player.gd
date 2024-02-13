@@ -103,7 +103,6 @@ func _interact() -> void:
 		return
 
 	if !is_interacting:
-		object.interact()
 		is_interacting = true
 		interaction_dir = Constants.DIRECTION_TO_AXIS[direction]
 		_save_state()

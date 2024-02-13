@@ -27,10 +27,6 @@ func _input(event: InputEvent) -> void:
 			_menu.back()
 			get_viewport().set_input_as_handled()
 
-	# LEVEL SELECTION
-	elif LevelManager.GAME_STATE == Enums.GAME_STATE.GAME_SELECTION:
-		pass
-
 	# GAME CONTROLS
 	elif LevelManager.GAME_STATE == Enums.GAME_STATE.GAME_ONGOING:
 		if event.is_action_pressed("ui_cancel"):
@@ -44,6 +40,19 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 		else:
 			_player._handle_move()
+
+	# LEVEL SELECTION
+	elif LevelManager.GAME_STATE == Enums.GAME_STATE.GAME_SELECTION:
+		pass
+
+	# CREDITS
+	elif LevelManager.GAME_STATE == Enums.GAME_STATE.CREDITS:
+		if (
+			event.is_action_pressed("ui_accept")
+			|| event.is_action_pressed("ui_cancel")
+			|| event.is_action_pressed("ui_back")
+		):
+			_menu.toggle_credits(false)
 
 
 func _detect_device(event: InputEvent) -> void:

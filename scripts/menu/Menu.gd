@@ -1,7 +1,9 @@
 extends Control
 
 @onready var _options = $Options
+@onready var _levels = $Levels
 @onready var _buttons = $Buttons
+@onready var _credits = $"../Credits"
 
 
 func toggle() -> void:
@@ -9,40 +11,58 @@ func toggle() -> void:
 		return
 
 	if visible:
-		_hide()
+		hide_menu()
 	else:
-		_pause()
+		pause()
 
 
 func back() -> void:
 	if _options.visible:
-		_toggle_options(false)
+		toggle_options(false)
 	elif LevelManager.GAME_STATE == Enums.GAME_STATE.PAUSE_MENU:
-		_hide()
+		hide_menu()
 
 
-func _pause() -> void:
+func _ready() -> void:
+	# Setup initial state
+	_buttons.visible = true
+	_options.visible = false
+	_levels.visible = false
+	_credits.visible = false
+
+	# Setup buttons signals
+	$Buttons/Start.pressed.connect(_start)
+	$Buttons/Restart.pressed.connect(_restart)
+	$Buttons/Options.pressed.connect(toggle_options.bind(true))
+	$Buttons/Quit.pressed.connect(_quit)
+	$Buttons/Credits.pressed.connect(toggle_credits.bind(true))
+
+
+func pause() -> void:
 	visible = true
+	_buttons.visible = true
 	_options.visible = false
 	LevelManager.GAME_STATE = Enums.GAME_STATE.PAUSE_MENU
 	_buttons.get_children()[0].grab_focus()
 
 
-func _hide() -> void:
+func hide_menu() -> void:
 	visible = false
 	_options.visible = false
+	_levels.visible = false
 	LevelManager.GAME_STATE = Enums.GAME_STATE.GAME_ONGOING
 
 
-func _toggle_options(state: bool) -> void:
+func toggle_options(state: bool) -> void:
 	_options.visible = state
 
 
 func _start() -> void:
-	visible = false
 	if LevelManager.GAME_STATE == Enums.GAME_STATE.START_MENU:
-		LevelManager.load_level()
+		_buttons.visible = false
+		_levels.visible = true
 	else:
+		visible = false
 		LevelManager.GAME_STATE = Enums.GAME_STATE.GAME_ONGOING
 
 
@@ -57,3 +77,12 @@ func _quit() -> void:
 	else:
 		LevelManager.quit()
 		LevelManager.GAME_STATE = Enums.GAME_STATE.START_MENU
+
+
+func toggle_credits(_state: bool) -> void:
+	_credits.visible = _state
+	if _state:
+		LevelManager.GAME_STATE = Enums.GAME_STATE.CREDITS
+	else:
+		LevelManager.GAME_STATE = Enums.GAME_STATE.START_MENU
+		_credits.stop()

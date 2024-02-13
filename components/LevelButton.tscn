@@ -1,0 +1,20 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgsfgrjy108ge"]
+
+[sub_resource type="GDScript" id="GDScript_78i15"]
+script/source = "extends MarginContainer
+
+@export var level: Enums.LEVELS
+
+func _ready():
+	$Button.text = Enums.LEVELS.keys()[level]
+	$Button.pressed.connect(func(): LevelManager.load_level(level))
+"
+
+[node name="LevelButton" type="MarginContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = SubResource("GDScript_78i15")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 2
+text = "Tutorial"
